@@ -11,6 +11,12 @@ class Settings(BaseSettings):
     def API_VERSION_PREFIX(self) -> str:
         return f"/api/v{self.API_VERSION}"
     
+    ENVIRONMENT: str = "prod"
+
+    @property
+    def IS_DEV_ENV(self) -> bool:
+        return self.ENVIRONMENT.lower() in ("dev", "local", "development")
+    
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
     # extra="ignore" -> ignore any environment variables that are not 
     # defined in the Settings class, necessary to pass it here. Without it,
