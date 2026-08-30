@@ -38,7 +38,7 @@ def create_app() -> FastAPI:
             )
     
     @app.exception_handler(AppException)
-    async def app_exception_handler(exc: AppException):
+    async def app_exception_handler(req: Request, exc: AppException):
         return JSONResponse(
             status_code=exc.status_code,
             content={
