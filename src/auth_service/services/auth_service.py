@@ -1,3 +1,4 @@
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 from auth_service.core.exceptions import AlreadyExistsError
 from auth_service.repo import user_repo
@@ -11,12 +12,14 @@ async def sign_up(user_signup_object: UserSignUpRequest, db_session: AsyncSessio
     if user:
         raise AlreadyExistsError(
             message.USER_ALREADY_EXISTS, 
-            data=UserResponse(
-                id=user.id,
-                full_name=user.full_name,
-                email=user.email,
-                created_at=user.created_at,
-                updated_at=user.updated_at
+            data=jsonable_encoder(
+                UserResponse(
+                    id=user.id,
+                    full_name=user.full_name,
+                    email=user.email,
+                    created_at=user.created_at,
+                    updated_at=user.updated_at
+                )
             )
         )
     
