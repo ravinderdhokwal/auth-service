@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from auth_service.api import api_router
 from auth_service.core import settings
 from auth_service.core.exceptions import AppException
 from auth_service.db.session import async_engine, get_db_session
@@ -20,7 +21,7 @@ async def lifespan(app: FastAPI):
 def create_app() -> FastAPI:
     app = FastAPI(title=settings.APPLICATION_NAME, lifespan=lifespan)
 
-    # app.include_router()
+    app.include_router(api_router, prefix=settings.API_VERSION_PREFIX)
 
     @app.get("/health", tags=["health check", "db health"])
     async def check_health(db: AsyncSession = Depends(get_db_session)):
